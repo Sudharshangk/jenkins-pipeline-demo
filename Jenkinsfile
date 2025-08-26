@@ -2,20 +2,20 @@ pipeline {
   agent any
 
   tools {
-    jdk 'JDK21'          
-    maven 'Maven_3_9'    
+    jdk 'JDK21'          // name configured in Jenkins -> Global Tool Configuration
+    maven 'Maven_3_9'    // name configured in Jenkins -> Maven installations
   }
 
   environment {
     APP_ENV = 'dev'
   }
 
-  stage('Checkout') {
-  steps {
-    git branch: 'main', url: 'https://github.com/Sudharshangk/jenkins-pipeline-demo.git'
-  }
-}
-
+  stages {
+    stage('Checkout') {
+      steps {
+        checkout scm
+      }
+    }
 
     stage('Build') {
       steps {
