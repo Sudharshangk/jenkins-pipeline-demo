@@ -1,44 +1,70 @@
 pipeline {
-   agent any
+  agent any
 
-   environment {
-       APP_ENV = 'dev'
-   }
+  tools {
+    jdk 'JDK21'          
+    maven 'Maven_3_9'    
+  }
 
-   stages {
-       stage('Clone') {
-           steps {
-               git branch: 'main', url: 'https://github.com/Sudharshangk/jenkins-pipeline-demo.git'
-           }
-       }
+  environment {
+    APP_ENV = 'dev'
+  }
 
-       stage('Build') {
-           steps {
-               echo 'Building the project...'
-               bat 'mvn clean install'
-           }
-       }
+  stages {
+    stage('Checkout') {
+      steps {
+        git 'https://github.com/Sudharshangk/jenkins-pipeline-demo.git'
+      }
+    }
 
-       stage('Test') {
-           steps {
-               echo 'Running tests...'
-               bat 'mvn test'
-           }
-       }
+    stage('Build') {
+      steps {
+        echo "Building project with Maven..."
+        bat '''
+          echo Running Maven Build
+          mvn -B -DskipTests clean package
+        '''
+      }
+    }
 
-       stage('Deploy') {
-           steps {
-               echo "Deploying to ${env.APP_ENV} environment..."
-           }
-       }
-   }
+    stage('Test') {
+      steps {
+        echo "Running tests..."
+        bat '''
+          echo Running Maven Tests
+          mvn -B test
+        '''
+      }
+      post {
+        always {
+          junit 'target/surefire-reports/*.xml'
+        }
+      }
+    }
 
-   post {
-       success {
-           echo 'Pipeline completed successfully.'
-       }
-       failure {
-           echo 'Pipeline failed.'
-       }
-   }
+    stage('Archive') {
+      steps {
+        echo "Archiving JAR artifacts..."
+        archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+      }
+    }
+
+    stage('Deploy') {
+      steps {
+        echo "Deploying to ${env.APP_ENV} (this is just a placeholder step)"
+      }
+    }
+  }
+
+  post {
+    success {
+      echo "Pipeline succeeded."
+    }
+    failure {
+      echo "Pipeline failed."
+    }
+    always {
+      echo "Build URL: ${env.BUILD_URL}"
+    }
+  }
 }
