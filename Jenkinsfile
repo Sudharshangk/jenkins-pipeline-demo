@@ -19,15 +19,21 @@ pipeline {
 
     stage('Build') {
       steps {
-        echo 'Building...'
-        bat 'C:\\Windows\\System32\\cmd.exe /c mvn -B -DskipTests clean package'
+        echo "Building project with Maven..."
+        bat '''
+          echo Running Maven Build
+          mvn -B -DskipTests clean package
+        '''
       }
     }
 
     stage('Test') {
       steps {
-        echo 'Running tests...'
-        bat 'C:\\Windows\\System32\\cmd.exe /c mvn -B test'
+        echo "Running tests..."
+        bat '''
+          echo Running Maven Tests
+          mvn -B test
+        '''
       }
       post {
         always {
@@ -38,20 +44,27 @@ pipeline {
 
     stage('Archive') {
       steps {
+        echo "Archiving JAR artifacts..."
         archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
       }
     }
 
     stage('Deploy') {
       steps {
-        echo "Deploying to ${env.APP_ENV} (no-op example)"
+        echo "Deploying to ${env.APP_ENV} (this is just a placeholder step)"
       }
     }
   }
 
   post {
-    success { echo 'Pipeline succeeded.' }
-    failure { echo 'Pipeline failed.' }
-    always { echo "Build URL: ${env.BUILD_URL}" }
+    success {
+      echo " Pipeline succeeded."
+    }
+    failure {
+      echo " Pipeline failed."
+    }
+    always {
+      echo "Build URL: ${env.BUILD_URL}"
+    }
   }
 }
