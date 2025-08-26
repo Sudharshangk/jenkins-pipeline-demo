@@ -2,7 +2,7 @@ pipeline {
   agent any
 
   tools {
-    jdk 'JDK17'          // name you will configure in Jenkins
+    jdk 'JDK21'          // name you will configure in Jenkins
     maven 'Maven_3_9'    // name to configure in Jenkins
   }
 
