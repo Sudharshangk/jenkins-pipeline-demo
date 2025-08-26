@@ -10,12 +10,12 @@ pipeline {
     APP_ENV = 'dev'
   }
 
-  stages {
-    stage('Checkout') {
-      steps {
-        git 'https://github.com/Sudharshangk/jenkins-pipeline-demo.git'
-      }
-    }
+  stage('Checkout') {
+  steps {
+    git branch: 'main', url: 'https://github.com/Sudharshangk/jenkins-pipeline-demo.git'
+  }
+}
+
 
     stage('Build') {
       steps {
