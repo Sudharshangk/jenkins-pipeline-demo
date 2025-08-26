@@ -2,8 +2,8 @@ pipeline {
   agent any
 
   tools {
-    jdk 'JDK21'          // name you configured in Jenkins -> Global Tool Configuration
-    maven 'Maven_3_9'    // name you configured in Jenkins -> Maven installations
+    jdk 'JDK21'          
+    maven 'Maven_3_9'    
   }
 
   environment {
@@ -13,7 +13,7 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        checkout scm
+        git 'https://github.com/Sudharshangk/jenkins-pipeline-demo.git'
       }
     }
 
@@ -58,10 +58,10 @@ pipeline {
 
   post {
     success {
-      echo " Pipeline succeeded."
+      echo "Pipeline succeeded."
     }
     failure {
-      echo " Pipeline failed."
+      echo "Pipeline failed."
     }
     always {
       echo "Build URL: ${env.BUILD_URL}"
