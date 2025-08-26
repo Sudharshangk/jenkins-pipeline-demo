@@ -2,8 +2,8 @@ pipeline {
   agent any
 
   tools {
-    jdk 'JDK21'          // name you will configure in Jenkins
-    maven 'Maven_3_9'    // name to configure in Jenkins
+    jdk 'JDK21'          // name you configured in Jenkins -> Global Tool Configuration
+    maven 'Maven_3_9'    // name you configured in Jenkins -> Maven installations
   }
 
   environment {
@@ -20,15 +20,14 @@ pipeline {
     stage('Build') {
       steps {
         echo 'Building...'
-        // Use bat on Windows agents, or sh on Linux agents.
-        bat 'mvn -B -DskipTests clean package'
+        bat 'C:\\Windows\\System32\\cmd.exe /c mvn -B -DskipTests clean package'
       }
     }
 
     stage('Test') {
       steps {
         echo 'Running tests...'
-        bat 'mvn -B test'
+        bat 'C:\\Windows\\System32\\cmd.exe /c mvn -B test'
       }
       post {
         always {
